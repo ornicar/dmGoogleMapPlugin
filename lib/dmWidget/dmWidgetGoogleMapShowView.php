@@ -9,6 +9,7 @@ class dmWidgetGoogleMapShowView extends dmWidgetPluginView
     
     $this->addRequiredVar(array(
       'address',
+      'json',
       'mapTypeId',
       'zoom',
       'navigationControl',
@@ -24,6 +25,7 @@ class dmWidgetGoogleMapShowView extends dmWidgetPluginView
 
     $map = $this->getService('google_map_helper')->map()
     ->address($vars['address'])
+    ->json($vars['json'])
     ->mapTypeId($vars['mapTypeId'])
     ->zoom($vars['zoom'])
     ->style(sprintf(

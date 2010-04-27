@@ -1,6 +1,6 @@
 (function($)
 {
-	$.fn.dmGoogleMap = function(opt)
+  $.fn.dmGoogleMap = function(opt)
   {
     if(typeof google == "undefined" || typeof google.maps == "undefined")
     {
@@ -15,9 +15,46 @@
       mapTypeId: google.maps.MapTypeId.HYBRID
     }, self.metadata(), opt || {}),
     map,
-    marker;
+    marker,
+    Markers = new Array(),
+    Infos = new Array();
 
-    if(options.coords)
+    if(options.json) {
+        coords = new google.maps.LatLng(options.coords[0], options.coords[1]);
+
+        map = new google.maps.Map(self.get(0), $.extend(options, { center: coords }));
+        if (options.showMarker == true) {
+          marker = new google.maps.Marker({
+              position: coords,
+              map: map
+          });
+        };
+
+        var json = $.parseJSON(options.json);
+        $.each(json.markers, function(indice, marker) {
+            Markers[indice] = new google.maps.Marker({
+                position: new google.maps.LatLng(marker.lat, marker.lng),
+                map: map,
+                clickable: true,
+                visible: true,
+                title: marker.title
+            });
+
+            Infos[indice] = new google.maps.InfoWindow({
+                content: marker.html
+            });
+
+            if (marker.image != undefined) {
+                Markers[indice].icon = marker.image;
+            }
+
+            google.maps.event.addListener(Markers[indice], 'click', function() {
+                Infos[indice].open(map, Markers[indice]);
+            });
+        });
+    }
+
+    else if(options.coords)
     {
       coords = new google.maps.LatLng(options.coords[0], options.coords[1]);
       
@@ -27,6 +64,7 @@
         map: map
       });
     }
+
     else if(options.address)
     {
       geocoder = new google.maps.Geocoder();

@@ -41,8 +41,14 @@ class dmGoogleMapTag extends dmHtmlTag
     return $this->setOption('address', (string) $location);
   }
 
-  public function coords($latitude, $longitude)
+  public function json($json_url)
   {
+    return $this->setOption('json', (string) $json_url);
+  }
+
+  public function coords($latitude, $longitude, $showMarker = true)
+  {
+    $this->setOption('showMarker', $showMarker);
     return $this->setOption('coords', array($latitude, $longitude));
   }
 
@@ -109,7 +115,7 @@ class dmGoogleMapTag extends dmHtmlTag
 
   protected function getJsonAttributes()
   {
-    return array('address', 'coords', 'mapTypeId', 'zoom', 'navigationControl', 'mapTypeControl', 'scaleControl');
+    return array('address', 'coords', 'mapTypeId', 'zoom', 'navigationControl', 'mapTypeControl', 'scaleControl', 'json', 'showMarker');
   }
 
   public function getJavascripts()
